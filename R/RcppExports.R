@@ -85,22 +85,6 @@ eigvalsC <- function(M, data_matrix = TRUE) {
     .Call(`_spca2_eigvalsC`, M, data_matrix)
 }
 
-rcppeigen_hello_world <- function() {
-    .Call(`_spca2_rcppeigen_hello_world`)
-}
-
-rcppeigen_outerproduct <- function(x) {
-    .Call(`_spca2_rcppeigen_outerproduct`, x)
-}
-
-rcppeigen_innerproduct <- function(x) {
-    .Call(`_spca2_rcppeigen_innerproduct`, x)
-}
-
-rcppeigen_bothproducts <- function(x) {
-    .Call(`_spca2_rcppeigen_bothproducts`, x)
-}
-
 lsspcaTC <- function(X, ncomps = 0L, stop_criterion = 0L, exact_cvexp = FALSE, alpha = 0.95, ncompbycvexp = 0.95, method = as.character( c("c")), indvec_in = NULL, cardvec_in = NULL, PMPC = FALSE, PMS = FALSE, epsPMPC = 1E-5, epsPMS = 1E-7, maxiterPMPC = 300L, maxiterPMS = 200L, rank_tol = 0.0) {
     .Call(`_spca2_lsspcaTC`, X, ncomps, stop_criterion, exact_cvexp, alpha, ncompbycvexp, method, indvec_in, cardvec_in, PMPC, PMS, epsPMPC, epsPMS, maxiterPMPC, maxiterPMS, rank_tol)
 }

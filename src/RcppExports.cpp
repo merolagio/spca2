@@ -266,49 +266,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// rcppeigen_hello_world
-Eigen::MatrixXd rcppeigen_hello_world();
-RcppExport SEXP _spca2_rcppeigen_hello_world() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(rcppeigen_hello_world());
-    return rcpp_result_gen;
-END_RCPP
-}
-// rcppeigen_outerproduct
-Eigen::MatrixXd rcppeigen_outerproduct(const Eigen::VectorXd& x);
-RcppExport SEXP _spca2_rcppeigen_outerproduct(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcppeigen_outerproduct(x));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rcppeigen_innerproduct
-double rcppeigen_innerproduct(const Eigen::VectorXd& x);
-RcppExport SEXP _spca2_rcppeigen_innerproduct(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcppeigen_innerproduct(x));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rcppeigen_bothproducts
-Rcpp::List rcppeigen_bothproducts(const Eigen::VectorXd& x);
-RcppExport SEXP _spca2_rcppeigen_bothproducts(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcppeigen_bothproducts(x));
-    return rcpp_result_gen;
-END_RCPP
-}
 // lsspcaTC
 List lsspcaTC(const Eigen::Map<Eigen::MatrixXd>& X, int ncomps, int stop_criterion, bool exact_cvexp, double alpha, double ncompbycvexp, Rcpp::CharacterVector method, Rcpp::Nullable<Rcpp::IntegerVector> indvec_in, Rcpp::Nullable<Rcpp::IntegerVector> cardvec_in, bool PMPC, bool PMS, double epsPMPC, double epsPMS, int maxiterPMPC, int maxiterPMS, double rank_tol);
 RcppExport SEXP _spca2_lsspcaTC(SEXP XSEXP, SEXP ncompsSEXP, SEXP stop_criterionSEXP, SEXP exact_cvexpSEXP, SEXP alphaSEXP, SEXP ncompbycvexpSEXP, SEXP methodSEXP, SEXP indvec_inSEXP, SEXP cardvec_inSEXP, SEXP PMPCSEXP, SEXP PMSSEXP, SEXP epsPMPCSEXP, SEXP epsPMSSEXP, SEXP maxiterPMPCSEXP, SEXP maxiterPMSSEXP, SEXP rank_tolSEXP) {
@@ -498,10 +455,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_spca2_PMnEigenpairs", (DL_FUNC) &_spca2_PMnEigenpairs, 5},
     {"_spca2_pcaC", (DL_FUNC) &_spca2_pcaC, 7},
     {"_spca2_eigvalsC", (DL_FUNC) &_spca2_eigvalsC, 2},
-    {"_spca2_rcppeigen_hello_world", (DL_FUNC) &_spca2_rcppeigen_hello_world, 0},
-    {"_spca2_rcppeigen_outerproduct", (DL_FUNC) &_spca2_rcppeigen_outerproduct, 1},
-    {"_spca2_rcppeigen_innerproduct", (DL_FUNC) &_spca2_rcppeigen_innerproduct, 1},
-    {"_spca2_rcppeigen_bothproducts", (DL_FUNC) &_spca2_rcppeigen_bothproducts, 1},
     {"_spca2_lsspcaTC", (DL_FUNC) &_spca2_lsspcaTC, 16},
     {"_spca2_lsspcaC", (DL_FUNC) &_spca2_lsspcaC, 17},
     {"_spca2_scaleC", (DL_FUNC) &_spca2_scaleC, 3},

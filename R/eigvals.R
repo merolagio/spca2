@@ -208,3 +208,154 @@ mp_qqplot.eigvals = function(
     n_fitline = n_fitline, addtitle = addtitle, show_plot = show_plot,
     return_plot = return_plot, what = "pca_fit")
 }
+
+#' Print Eigenvalues
+#'
+#' Print the eigenvalues stored in an \code{eigvals} object.
+#'
+#' @param x An object of class \code{eigvals}, as returned by
+#'   \code{\link{eigvals}()}.
+#' @param digits An integer scalar (default \code{2}). Number of decimal
+#'   places.
+#' @param ... Further arguments. These are currently unused and trigger an
+#'   error if supplied.
+#'
+#' @return \code{x}, invisibly.
+#' @examples
+#' data(holzinger)
+#' ho_eig = eigvals(holzinger, screeplot = FALSE)
+#' print(ho_eig)
+#' @family pca
+#' @exportS3Method
+print.eigvals = function(x, digits = 2, ...) {
+  dots = list(...)
+  if (length(dots) > 0)
+    stop("Unused arguments: ", paste(names(dots), collapse = ", "))
+  if (!inherits(x, "eigvals"))
+    stop("x must be an eigvals object", call. = FALSE)
+  if (!is.numeric(digits) || length(digits) != 1 || is.na(digits) ||
+      digits < 0)
+    stop("digits must be a nonnegative integer", call. = FALSE)
+
+  ev = round(x$eigenvalues, digits)
+  names(ev) = paste0("PC", seq_along(ev))
+  print(ev)
+  invisible(x)
+}
+
+#' Summarize Eigenvalues
+#'
+#' Print a table with the eigenvalues, the percentage of variance explained
+#' (Vexp) and the cumulative percentage of variance explained (Cvexp).
+#'
+#' @param object An object of class \code{eigvals}, as returned by
+#'   \code{\link{eigvals}()}.
+#' @param cols An integer vector of eigenvalue indices or \code{NULL}
+#'   (default \code{NULL}: all eigenvalues). A single integer \code{k}
+#'   selects the first \code{k} eigenvalues.
+#' @param digits An integer scalar (default \code{1}). Number of decimal
+#'   places of the percentages. Eigenvalues are shown with one decimal.
+#' @param return_table A logical value (default \code{FALSE}). If
+#'   \code{TRUE}, return the numeric table (proportions, not percentages).
+#' @param print_table A logical value (default \code{TRUE}). If \code{TRUE},
+#'   print the formatted table.
+#' @param ... Further arguments. These are currently unused and trigger an
+#'   error if supplied.
+#'
+#' @return If \code{return_table = TRUE}, a numeric matrix with rows
+#'   \code{Eigval}, \code{Vexp} and \code{Cvexp}; otherwise \code{NULL}
+#'   invisibly.
+#' @examples
+#' data(holzinger)
+#' ho_eig = eigvals(holzinger, screeplot = FALSE)
+#' summary(ho_eig, cols = 6)
+#' @family pca
+#' @exportS3Method
+summary.eigvals = function(object, cols = NULL, digits = 1,
+                           return_table = FALSE, print_table = TRUE, ...) {
+  dots = list(...)
+  if (length(dots) > 0)
+    stop("Unused arguments: ", paste(names(dots), collapse = ", "))
+  if (!inherits(object, "eigvals"))
+    stop("object must be an eigvals object", call. = FALSE)
+  validate_booleans(return_table = return_table, print_table = print_table)
+  if (!is.numeric(digits) || length(digits) != 1 || is.na(digits) ||
+      digits < 0)
+    stop("digits must be a nonnegative integer", call. = FALSE)
+
+  n_eig = length(object$eigenvalues)
+  if (is.null(cols)) {
+    cols = seq_len(n_eig)
+  } else if (length(cols) == 1L) {
+    cols = seq_len(cols)
+  }
+  if (!is.numeric(cols) || anyNA(cols) || any(cols < 1) ||
+      any(cols > n_eig) || any(cols != floor(cols)))
+    stop("cols must contain integers between 1 and the number of eigenvalues",
+         call. = FALSE)
+
+  out = rbind(Eigval = object$eigenvalues,
+              Vexp = object$vexp,
+              Cvexp = object$cvexp)[, cols, drop = FALSE]
+  colnames(out) = paste0("PC", cols)
+
+  if (print_table) {
+    outp = rbind(
+      Eigval = sprintf("%.1f", round(out["Eigval", ], 1)),
+      Vexp = paste0(sprintf(paste0("%.", digits, "f"),
+                            round(100 * out["Vexp", ], digits)), "%"),
+      Cvexp = paste0(sprintf(paste0("%.", digits, "f"),
+                             round(100 * out["Cvexp", ], digits)), "%"))
+    colnames(outp) = colnames(out)
+    print(outp, quote = FALSE, right = TRUE)
+  }
+
+  if (return_table)
+    return(out)
+  invisible()
+}
+
+#' Plot Eigenvalues
+#'
+#' Produce the scree plot and, optionally, the Wachter qq-plot of an
+#' \code{eigvals} object, using \code{\link{scree_plot}} and
+#' \code{\link{mp_qqplot}}.
+#'
+#' @param x An object of class \code{eigvals}, as returned by
+#'   \code{\link{eigvals}()}.
+#' @param screeplot A logical value (default \code{TRUE}). Produce the scree
+#'   plot.
+#' @param qq_plot A logical value (default \code{FALSE}). Produce the
+#'   Wachter qq-plot.
+#' @param n_plot An integer scalar or \code{NULL} (default \code{NULL}).
+#'   Number of leading eigenvalues to plot. If \code{NULL}, all are plotted.
+#' @param n_fitline An integer scalar or \code{NULL} (default \code{NULL}:
+#'   no line). Passed to \code{\link{mp_qqplot}}.
+#' @param n_obs,cor,common_var Passed to \code{\link{mp_qqplot}}.
+#' @param ... Further arguments. These are currently unused and trigger an
+#'   error if supplied.
+#'
+#' @return \code{x}, invisibly.
+#' @examples
+#' data(holzinger)
+#' ho_eig = eigvals(holzinger, screeplot = FALSE)
+#' plot(ho_eig, qq_plot = TRUE, n_fitline = -4)
+#' @family pca
+#' @exportS3Method
+plot.eigvals = function(x, screeplot = TRUE, qq_plot = FALSE, n_plot = NULL,
+                        n_fitline = NULL, n_obs = NULL, cor = TRUE,
+                        common_var = NULL, ...) {
+  dots = list(...)
+  if (length(dots) > 0)
+    stop("Unused arguments: ", paste(names(dots), collapse = ", "))
+  if (!inherits(x, "eigvals"))
+    stop("x must be an eigvals object", call. = FALSE)
+  validate_booleans(screeplot = screeplot, qq_plot = qq_plot)
+
+  if (screeplot)
+    scree_plot(x, n_plot = n_plot)
+  if (qq_plot)
+    mp_qqplot(x, n_obs = n_obs, cor = cor, common_var = common_var,
+              n_plot = n_plot, n_fitline = n_fitline)
+  invisible(x)
+}
