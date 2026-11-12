@@ -44,10 +44,13 @@ Other pca:
 \code{\link{is.pca}()},
 \code{\link{mp_qqplot.eigvals}()},
 \code{\link{pca}()},
+\code{\link{plot.eigvals}()},
+\code{\link{print.eigvals}()},
 \code{\link{print.pca}()},
 \code{\link{scree_plot.eigvals}()},
 \code{\link{show_correlations}()},
 \code{\link{show_weights}()},
+\code{\link{summary.eigvals}()},
 \code{\link{wachter_qqplot}()}
 }
 \concept{pca}
